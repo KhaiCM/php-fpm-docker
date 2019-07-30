@@ -22,9 +22,12 @@ RUN apt-get update && apt-get install -y \
 # clear cache
 RUN apt-get clean && -rf /var/lib/apt/lists/*
 
-# add users
-RUN groupadd -g 1000 www
-RUN useradd -u 1000 -ms /bin/bash -g www www
+# configure mcrypt
+RUN apt-get update \
+    && apt-get install -y libmcrypt-dev \
+    && rm -rf /var/lib/apt/lists/* \
+    && pecl install mcrypt-1.0.1 \
+    && docker-php-ext-enable mcrypt
 
 # install gmp allow for arbitrary-length integers to be worked
 RUN apt-get update \
@@ -33,7 +36,7 @@ RUN apt-get update \
 	&& docker-php-ext-configure gmp \
     && docker-php-ext-install gmp
 
-# configure gd library
+# configure gd library dynamically manipulating images under Ubuntu Linux LTS
 RUN docker-php-ext-configure gd \
     --enable-gd-native-ttf \
     --with-jpeg-dir=/usr/lib \
@@ -47,6 +50,11 @@ RUN docker-php-ext-install \
     gd \
     intl \
     zip
+
+# add users
+RUN groupadd -g 1000 www
+RUN useradd -u 1000 -ms /bin/bash -g www www
+
 # working directory
 WORKDIR /var/www/laravel
 
