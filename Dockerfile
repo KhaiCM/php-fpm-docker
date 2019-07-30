@@ -19,9 +19,6 @@ RUN apt-get update && apt-get install -y \
     --no-install-recommends \
     && rm -r /var/lib/apt/lists/*
 
-# clear cache
-RUN apt-get clean && -rf /var/lib/apt/lists/*
-
 # configure mcrypt
 RUN apt-get update \
     && apt-get install -y libmcrypt-dev \
