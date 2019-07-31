@@ -28,10 +28,9 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     zlib1g-dev libicu-dev g++ \
-    npm i -g npm
+    npm i -g npm \
     --no-install-recommends \
     && rm -r /var/lib/apt/lists/*
-
 
 # configure mcrypt
 RUN apt-get update \
