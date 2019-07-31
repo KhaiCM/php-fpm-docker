@@ -2,6 +2,18 @@ FROM php:7.2-fpm
 
 MAINTAINER Minh Khai <minhkhai97@gmail.com>
 
+#install composer
+RUN curl -s http://getcomposer.org/installer | php \
+    && mv composer.phar /usr/local/bin/composer
+
+# install npm
+
+RUN apt-get update
+RUN apt-get install -y gnupg gnupg1 gnupg2
+RUN curl -sL https://deb.nodesource.com/setup_8.x -o nodesource_setup.sh
+RUN bash nodesource_setup.sh
+RUN apt-get install -y npm
+
 # install dependencies
 RUN apt-get update && apt-get install -y \
     libpq-dev \
@@ -16,8 +28,10 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     zlib1g-dev libicu-dev g++ \
+    npm i -g npm
     --no-install-recommends \
     && rm -r /var/lib/apt/lists/*
+
 
 # configure mcrypt
 RUN apt-get update \
